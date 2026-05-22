@@ -1,22 +1,28 @@
+// Importações de dependências
 import React from 'react';
 import { StyleSheet, View, Text, Image } from 'react-native';
-import InputLabel from './InputLabel';
 
+// Exportação do componente de cabeçalho
 export default function Header() {
+
+    // Exporta os componentes
     return (
         <View style={styles.container}>
             <View>
-                <Text style={styles.text}>
+                {/* Título principal */}
+                <Text style={styles.title}>
                     <Text style={styles.boldedText}>Álcool </Text>
                     ou
                     <Text style={styles.boldedText}> gasolina</Text>
                 </Text>
 
-                <Text style={styles.subText}>
+                {/* Subtítulo */}
+                <Text style={styles.subTitle}>
                     <Text>Descubra qual é mais vantajoso</Text>
                 </Text>
             </View>
 
+            {/* Imagem */}
             <View style={styles.imageView}>
                 <Image style={styles.image} source={require('../assets/GasStation.png')} resizeMode='cover'/>
             </View>
@@ -24,32 +30,33 @@ export default function Header() {
     )
 }
 
+// Estilizações personalizadas
 const styles = StyleSheet.create({
-    container: {
+    container: { // Estilo do container (pai de tudo)
         width: '100%',
     },
 
-    text: {
+    title: { // Estilo do título principal
         color: 'black',
         fontSize: 36,
         textAlign: 'center',
     },
 
-    boldedText: {
-        fontWeight: 600,
-    },
-
-    subText: { 
+    subTitle: { // Estilo do subtítulo
         color: '#30302E',
         fontSize: 18,
         textAlign: 'center',
     },
 
-    imageView: {
+    boldedText: { // Estilo do texto grifado
+        fontWeight: 600,
+    },
+
+    imageView: { // Estilo do container da imagem
         alignItems: 'center',
     },
     
-    image: {
+    image: { // Estilo da iamgem em si
         width: '100%',
         height: 300,
     }

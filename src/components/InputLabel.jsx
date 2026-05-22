@@ -1,21 +1,31 @@
-import React, { useState } from 'react';
+// Importações de dependências
+import React, { useContext, useState } from 'react';
 import { StyleSheet, View, Text, TextInput } from 'react-native';
-import { Droplet, Fuel } from 'lucide-react-native';
+import * as Icons from 'lucide-react-native';
 
-export default function InputLabel({ text, icon }) {
-    const [value, setValue] = useState(0.0);
+// Importações de contexto
+import ResultContext from '../contexts/ResultContext';
 
+// Exportação do componente de Input com Label
+export default function InputLabel({ text, icon, type }) {
+    const [value, setValue] = useState(0.0); // Cria um estado que guarda o valor digitado
+    const {gasValue, setGasValue, ethanolValue, setEthanolValue} = useContext(ResultContext)
+    const IconComponent = Icons[icon];
+
+    // Export os componentes
     return (
         <View style={styles.container}>
+            {/* Label do Input */}
             <View style={styles.textView}>
-                {icon == "gas" ? (<Fuel width={32} strokeWidth={2}/>) : (<Droplet width={32} strokeWidth={2}/>)}
+                <IconComponent width={28} height={28} strokeWidth={2}/>
                 <Text style={styles.label}>{text}</Text>
             </View>
+
+            {/* Input de texto configurado para aceitar somente números */}
             <TextInput
                 style={styles.input}
-                inputMode="numeric"
-                keyboardType="numeric"
-                onChangeText={setValue}
+                inputMode="numeric" // Fala que o tipo do Input é númerico, o que faz o teclado ser apenas de números
+                onChangeText={(value) => {if (type == "gas") {setGasValue(value)} else if (type == "ethanol") {setEthanolValue(value)} else {setValue(value)}}} // Quando o valor for trocado, troca o estado
                 value={value}
                 placeholder="0.0"
                 placeholderTextColor="#999"
@@ -24,33 +34,31 @@ export default function InputLabel({ text, icon }) {
     );
 }
 
+// Estilizações personalizadas
 const styles = StyleSheet.create({
-    container: {
+    container: { // Estilo do container (pai de tudo)
         width: '100%',
         paddingHorizontal: 20,
     },
 
-    textView: {
+    textView: { // Estilo do container de texto
+        marginBottom: 8,
         flexDirection: 'row',
-        gap: 2,
+        gap: 5,
     },
 
-    label: {
+    label: { // Estilo do label (texto)
         fontSize: 20,
-        marginBottom: 8,
         width: '100%'
     },
 
-    boldedLabel: {
-        fontWeight: 600
-    },  
-
-    input: {
+    input: { // Estilo do input
         height: 48,
+        paddingHorizontal: 12,
+        
         borderWidth: 1,
         borderColor: '#ccc',
         borderRadius: 8,
-        paddingHorizontal: 12,
         backgroundColor: '#fff',
         fontSize: 18,
     },
