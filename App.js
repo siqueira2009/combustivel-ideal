@@ -1,43 +1,54 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View, TextInput} from 'react-native';
-import PriceLabel from './src/components/PriceLabel';
+import React, { useRef } from 'react';
+import { StyleSheet, ScrollView, View, TextInput } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
+
+import Header from './src/components/Header';
+import InputLabel from './src/components/InputLabel';
+import CustomButton from './src/components/CustomButton';
+import ResultSheet from './src/components/ResultSheet';
+
+import ResultContext from './src/contexts/ResultSheet';
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <TextInput style={styles.input}/>
+  const bottomSheetRef = useRef(null);
 
-      <View style={styles.priceContainer}>
-        <PriceLabel type={"Etanol"} price={5.32}/>
-        <PriceLabel type={"Gasolina"} price={6.45}/>
-      </View>
-    </View>
-  );
+  function openSheet() {
+    bottomSheetRef.current?.present();
+  }
+
+  return (
+    <ResultContext.Provider value={bottomSheetRef}>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <BottomSheetModalProvider>
+          <ScrollView style={{flex: 1}} contentContainerStyle={styles.container}>
+            <Header/>
+
+            <View style={styles.inputContainer}>
+              <InputLabel text={"Preço da gasolina"} icon={"gas"} />
+              <InputLabel text={"Preço do etanol"} icon={"etanol"}/>
+            </View>
+
+            <CustomButton title={"Verificar"} icon={"Scale"} onPress={openSheet} />
+
+            <ResultSheet/>
+          </ScrollView>
+        </BottomSheetModalProvider>
+      </GestureHandlerRootView>
+    </ResultContext.Provider>
+  )
 }
 
 const styles = StyleSheet.create({
   container: {
+    width: '100%',
     flex: 1,
-    paddingHorizontal: 10,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    paddingVertical: 60,
+    backgroundColor: '#F3F4F8',
   },
 
-  priceContainer: {
-    width: '100%',
-    gap: 10,
-    flexDirection: 'column',
+  inputContainer: {
+    gap: 20,
+    marginBottom: 20
   },
-
-  input: {
-    marginBottom: 10,
-    width: '100%',
-    borderWidth: 1.5,
-    borderColor: 'black',
-    borderRadius: 100,
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    fontSize: 18
-  }
-});
+})
