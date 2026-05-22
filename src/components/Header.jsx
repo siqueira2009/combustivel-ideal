@@ -11,7 +11,7 @@ export default function Header() {
             <View>
                 {/* Título principal */}
                 <Text style={styles.title}>
-                    <Text style={styles.boldedText}>Álcool </Text>
+                    <Text style={styles.boldedText}>Etanol </Text>
                     ou
                     <Text style={styles.boldedText}> gasolina</Text>
                 </Text>

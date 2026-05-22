@@ -37,7 +37,7 @@ export default function Home() {
 
             <View style={styles.inputContainer}>
               <InputLabel text={"Preço da gasolina"} icon={"Fuel"} type={"gas"}/>
-              <InputLabel text={"Preço do etanol"} icon={"Droplet"} type={"ethanol"}/>
+              <InputLabel text={"Preço do etanol"} icon={"Leaf"} type={"ethanol"}/>
             </View>
 
             <CustomButton title={"Verificar"} icon={"Scale"} onPress={openSheet} />

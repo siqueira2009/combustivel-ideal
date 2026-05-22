@@ -1,17 +1,37 @@
 // Importações de dependências
-import React, { useCallback, useContext, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { BottomSheetModal, BottomSheetView, BottomSheetBackdrop } from '@gorhom/bottom-sheet';
-import { Fuel, Droplet } from 'lucide-react-native';
+import { Fuel, Leaf, TriangleAlert } from 'lucide-react-native';
 
 // Importações de contextos
 import ResultContext from '../contexts/ResultContext';
 
+// Importações de funções de serviços
+import { CalculatePercentage, worthEthanol } from '../services/Calculation';
+
 // Exportação do componente de Bottom Sheet de resultados
 export default function ResultSheet() {
-    const {bottomSheetRef} = useContext(ResultContext); // Usa o contexto de resultado
+    const {bottomSheetRef, gasValue, ethanolValue} = useContext(ResultContext); // Usa o contexto de resultado
     const [isOpen, setIsOpen] = useState(false); // Cria um estado para guardar se o Bottom Sheet está aberto
-    // Neste caso usa um Memo para que o Array seja guardado e não criado em toda renderização, somente quando necessário
+    const [ethanolWorthy, setEthanolWorthy] = useState(false); // Guarda se vale a pena abastecer com Etanol
+    const [ethanolPercentage, setEthanolPercentage] = useState(0)
+
+    async function updateStates() {
+        if (gasValue == 0 || ethanolValue == 0 || gasValue == '.' || gasValue == ',' || ethanolValue == '.' || ethanolValue == ',') {
+            setEthanolWorthy(null);
+            return;
+        }
+
+        const percentage = await CalculatePercentage(gasValue, ethanolValue);
+        const worthy = worthEthanol(percentage);
+        setEthanolPercentage(percentage);
+        setEthanolWorthy(worthy);
+    }
+
+    useEffect(() => {
+        updateStates();
+    }, [gasValue, ethanolValue])
 
     // Função que usa um Callback do React para gerar um fundo para o BottomSheet, que, quando clicado, fecha-o
     // O useCallback serve para guardar uma função entre renderizações, sem necessidade de gerar a função toda vez que o componente for renderizado
@@ -36,14 +56,23 @@ export default function ResultSheet() {
             handleIndicatorStyle={styles.bottomSheetHandler} // Estiliza o indicador de movimento
             onAnimate={(fromIndex, toIndex) => setIsOpen(toIndex > -1)} // Quando animar, troca o estado
         >
-            <BottomSheetView style={styles.bottomSheetContainer}>
-                <Text style={styles.label}>A melhor escolha é</Text>
-                <View style={styles.bestChoiceView}>
-                    <Droplet style={styles.icon} width={92} height={92} strokeWidth={1.5}/>
-                    <Text style={styles.bestChoice}>Etanol</Text>
-                    <Text style={styles.subText}>Ele está custando 47% da gasolina</Text>
-                </View>
-            </BottomSheetView>
+            {ethanolWorthy == null ? (
+                <BottomSheetView style={styles.bottomSheetContainer}>
+                    <View style={styles.bestChoiceView}>
+                        <TriangleAlert style={styles.icon} width={92} height={92} strokeWidth={1.5}/>
+                        <Text style={styles.label}>Digite um valor válido!</Text>
+                    </View>
+                </BottomSheetView>
+            ) : (
+                <BottomSheetView style={styles.bottomSheetContainer}>
+                    <Text style={styles.label}>A melhor escolha é</Text>
+                    <View style={styles.bestChoiceView}>
+                        {ethanolWorthy == true ? (<Leaf style={styles.icon} width={92} height={92} strokeWidth={1.5}/>) :<Fuel style={styles.icon} width={92} height={92} strokeWidth={1.5}/>}
+                        <Text style={styles.bestChoice}>{ethanolWorthy == true ? ("Etanol") : ("Gasolina")}</Text>
+                        <Text style={styles.subText}>O etanol está custando {ethanolPercentage}% da gasolina</Text>
+                    </View>
+                </BottomSheetView>
+            )}
         </BottomSheetModal>
     )
 }
@@ -82,7 +111,7 @@ const styles = StyleSheet.create({
 
     bestChoice: { // Estilo do texto de melhor escolha
         fontSize: 48,
-        textAlign: 'center'
+        textAlign: 'center',
     },
 
     subText: { // Estilo do texto falando a diferença
