@@ -18,7 +18,7 @@ export default function CustomButton({ title, onPress }) {
 // Estilizações personalizadas
 const styles = StyleSheet.create({
     button: { // Estilo do botão
-        width: '80%',
+        width: '100%',
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',

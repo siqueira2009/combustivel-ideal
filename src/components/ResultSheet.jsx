@@ -1,5 +1,5 @@
 // Importações de dependências
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { BottomSheetModal, BottomSheetView, BottomSheetBackdrop } from '@gorhom/bottom-sheet';
 import { Fuel, Leaf, TriangleAlert } from 'lucide-react-native';
@@ -7,31 +7,10 @@ import { Fuel, Leaf, TriangleAlert } from 'lucide-react-native';
 // Importações de contextos
 import ResultContext from '../contexts/ResultContext';
 
-// Importações de funções de serviços
-import { CalculatePercentage, worthEthanol } from '../services/Calculation';
-
 // Exportação do componente de Bottom Sheet de resultados
 export default function ResultSheet() {
-    const {bottomSheetRef, gasValue, ethanolValue} = useContext(ResultContext); // Usa o contexto de resultado
+    const {bottomSheetRef, ethanolWorthy, ethanolPercentage} = useContext(ResultContext); // Usa o contexto de resultado
     const [isOpen, setIsOpen] = useState(false); // Cria um estado para guardar se o Bottom Sheet está aberto
-    const [ethanolWorthy, setEthanolWorthy] = useState(false); // Guarda se vale a pena abastecer com Etanol
-    const [ethanolPercentage, setEthanolPercentage] = useState(0)
-
-    async function updateStates() {
-        if (gasValue == 0 || ethanolValue == 0 || gasValue == '.' || gasValue == ',' || ethanolValue == '.' || ethanolValue == ',') {
-            setEthanolWorthy(null);
-            return;
-        }
-
-        const percentage = await CalculatePercentage(gasValue, ethanolValue);
-        const worthy = worthEthanol(percentage);
-        setEthanolPercentage(percentage);
-        setEthanolWorthy(worthy);
-    }
-
-    useEffect(() => {
-        updateStates();
-    }, [gasValue, ethanolValue])
 
     // Função que usa um Callback do React para gerar um fundo para o BottomSheet, que, quando clicado, fecha-o
     // O useCallback serve para guardar uma função entre renderizações, sem necessidade de gerar a função toda vez que o componente for renderizado

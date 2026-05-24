@@ -38,7 +38,6 @@ export default function InputLabel({ text, icon, type }) {
 const styles = StyleSheet.create({
     container: { // Estilo do container (pai de tudo)
         width: '100%',
-        paddingHorizontal: 20,
     },
 
     textView: { // Estilo do container de texto
