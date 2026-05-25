@@ -29,7 +29,7 @@ export default function ResultCard({result, date, percentage, showCard}) {
                 <Text style={styles.text}>{result == true ? "Etanol" : "Gasolina"}</Text>
             </View>
 
-            <Text style={styles.label}>Com o etanol custando {percentage}% da gasolina </Text>
+            <Text style={styles.label}>O etanol está custando {percentage}% da gasolina </Text>
         </View>
     );
 }
