@@ -1,29 +1,31 @@
 {
   "expo": {
-    "name": "18.05.2026",
-    "slug": "18.05.2026",
+    "name": "Gasolapp",
+    "slug": "18052026",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash-icon.png",
+      "image": "./src/assets/splash-icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#4950CB"
     },
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
-        "foregroundImage": "./assets/android-icon-foreground.png",
-        "backgroundImage": "./assets/android-icon-background.png",
-        "monochromeImage": "./assets/android-icon-monochrome.png"
+        "backgroundColor": "#4950CB",
+        "foregroundImage": "./src/assets/icon.png"
+      },
+      "package": "com.anonymous.x18.x05.x2026"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "1f906f13-a81f-4dee-908f-95e19c2196f5"
       }
     },
-    "web": {
-      "favicon": "./assets/favicon.png"
-    }
+    "owner": "siqueira2009"
   }
 }
